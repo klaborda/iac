@@ -1,23 +1,3 @@
-[![CD](https://github.com/Mafyuh/iac/actions/workflows/CD.yml/badge.svg)](https://github.com/Mafyuh/iac/actions/workflows/CD.yml)
-[![Ansible](https://github.com/Mafyuh/iac/actions/workflows/ansible-playbooks.yml/badge.svg)](https://github.com/Mafyuh/iac/actions/workflows/ansible-playbooks.yml)
-[![GitLab Mirror](https://img.shields.io/badge/Mirror-GitLab-orange?logo=gitlab)](https://gitlab.com/Mafyuh/iac)
-[![Forgejo Mirror](https://img.shields.io/badge/Mirror-Forgejo-orange?logo=forgejo)](https://git.mafyuh.io/mafyuh/iac)
-
-[![Pods](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fcluster_pods_running&&logo=kubernetes&color=black)](https://kubernetes.io/)&nbsp;
-[![Nodes](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fcluster_node_count&label=Nodes&logo=kubernetes&color=black)](https://kubernetes.io/)&nbsp;
-[![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fcluster_uptime_days&label=Uptime&logo=kubernetes&color=black)](https://kubernetes.io/)&nbsp;
-[![CPU](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fcluster_cpu_usage&&logo=kubernetes&label=CPU&color=black)](https://kubernetes.io/)&nbsp;
-[![RAM](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fcluster_memory_usage&&logo=kubernetes&label=RAM&color=black)](https://kubernetes.io/)&nbsp;
-[![Download](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fspeedtest_download&label=Download&logo=speedtest&color=black)](https://www.speedtest.net/)&nbsp;
-[![Upload](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fspeedtest_upload&label=Upload&logo=speedtest&color=black)](https://www.speedtest.net/)&nbsp;
-[![Version](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fkubernetes_version&label=Kubernetes&logo=kubernetes&color=black)](https://kubernetes.io/)&nbsp;
-[![Talos](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Ftalos_version&&logo=talos&color=black)](https://kubernetes.io/)&nbsp;
-[![PVE Version](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fpve_version&&logo=proxmox&color=black)](https://kubernetes.io/)&nbsp;
-[![Flux](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fflux_version&&logo=flux&color=black)](https://kubernetes.io/)&nbsp;
-[![Alerts](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.mafyuh.dev%2Fcluster_alert_count&&logo=prometheus)](https://kubernetes.io/)&nbsp;
-
-![Header Image](https://raw.githubusercontent.com/Mafyuh/homelab-svg-assets/main/assets/header_.png)
-
 <div align="center">
 
 # iac
@@ -47,7 +27,7 @@ Everything is containerized — either managed with Docker Compose or orchestrat
 To automate infrastructure updates, I use **Github Actions**, which trigger workflows upon changes to this repo. This ensures seamless deployment and maintenance across my homelab:
 
 - **[Flux](https://fluxcd.io/)** manages Continuous Deployment (CD) for Kubernetes, deployed via [Flux Operator](https://fluxcd.control-plane.io/).
-- **[Docker CD Workflow](https://github.com/Mafyuh/iac/blob/main/.github/workflows/CD.yml)** handles Continuous Deployment for Docker services.
+- **[Docker CD Workflow](https://github.com/klaborda/iac/blob/main/.github/workflows/CD.yml)** handles Continuous Deployment for Docker services.
 - **[Renovate](https://github.com/renovatebot/renovate)** keeps services updated by opening PRs for new versions.
 - **[Ansible](https://github.com/ansible/ansible)** is used to execute playbooks on all of my VMs, automating management and configurations
 - [**Comin**](https://github.com/nlewo/comin) keeps NixOS flakes in sync with this repo
@@ -77,35 +57,9 @@ I use a combination of **Grafana, fluent-bit, VictoriaLogs and Prometheus** with
 - **Grafana** – Dashboarding and visualization
 - **Exporters** – Blackbox Exporter, Speedtest Exporter, etc.
 
-### 🤖 **AI**
-
-I use [Bifrost](https://github.com/maximhq/bifrost) as a model gateway for local and cloud AI providers.
-
-- **Providers:** Ollama, NVIDIA NIM, Opencode ($10/m), Codex ($20/m), and OpenRouter
-- **Interfaces:** [Open WebUI](https://github.com/open-webui/open-webui) for chat, [T3Code](https://t3.codes) & [OAI Compatible Provider for Copilot](https://github.com/JohnnyZ93/oai-compatible-copilot)
-- **Infrastructure:**
-  - [cli-proxy-api](https://github.com/router-for-me/CLIProxyAPI) exposes subscriptions over API to Bifrost
-  - [mcphub](https://github.com/samanhappy/mcphub) provides one MCP connection to all of my stdio MCP servers
-  - [SearXNG](https://github.com/searxng/searxng) provides web search for AI
-  - ai-proxy (custom) backfills `/v1/models` with [models.dev](https://models.dev) metadata so chat and IDE clients actually know each model's capabilities
-
-### ☁️ **Cloud Dependencies**
-
-Although I try to self-host everything I can, my infra still relies on the cloud for certain services.
-
-| Service                                                                                 | Use                                                                                                             | Cost           |
-| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------- |
-| [Proton](https://proton.me/)                                                            | IMAP, SMTP, VPN (Pass once there is Autofill Hotkey)                                                            | ~$120/yr       |
-| [Bitwarden](https://bitwarden.com/)                                                     | Secrets for all tools                                                                                           | Free           |
-| [OneDrive](https://www.microsoft.com/en-us/microsoft-365/onedrive/online-cloud-storage) | Takes backups of Proxmox VM's, Kubernetes PV's (will migrate to Proton Drive once there's proper Linux support) | Free (e5 dev)  |
-| [Cloudflare](https://www.cloudflare.com/)                                               | Domain, DNS, WAF                                                                                                | Free           |
-| [GitHub](https://github.com/)                                                           | Hosting this repo and continuous integration/deployments                                                        | Free           |
-| [RackNerd](https://www.racknerd.com/)                                                   | RackNerd VPS, runs services such as Forgejo                                                                     | ~$60/yr        |
-|                                                                                         |                                                                                                                 | Total: ~$15/mo |
-
 ## 🧑‍💻 **Getting Started**
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Mafyuh/iac)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/klaborda/iac)
 
 This repo is not structured like a project you can easily replicate. Although if you are new to any of the tools used I encourage you to read through the directories that make up each tool to see how I am using them.
 
@@ -123,47 +77,3 @@ Some good references for how I learned this stuff (other than RTFM)
 - [Ansible](https://www.youtube.com/watch?v=goclfp6a2IQ)
 
 Special thank you to [@chkpwd](https://github.com/chkpwd) for helping me get this started. [His repo](https://github.com/chkpwd/iac) was the inspiration for this.
-
-## 🖥️ **Hardware**
-
-Proof that you don't need expensive new equipment to run infra like mine. Mostly everything here is secondhand, bought over time, totaling less than ~$4k.
-
-<details open>
-  <summary><strong>Servers</strong></summary>
-
-| Name                      | Device                                                                                                                | CPU               | RAM        | Storage                                                  | GPU             | Purpose               |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------- | ---------- | -------------------------------------------------------- | --------------- | --------------------- |
-| **Talos-1**               | Optiplex 7040 Micro                                                                                                   | Intel i5-6700t    | 32GB DDR4  | 1x1TB SATA SSD 128GB NVME                                | Integrated      | k8s control-plane     |
-| **Talos-2**               | Optiplex 7040 Micro                                                                                                   | Intel i5-6700t    | 32GB DDR4  | 1x1TB SATA SSD 128GB NVME                                | Integrated      | k8s control-plane     |
-| **Talos-3**               | Optiplex 7040 Micro                                                                                                   | Intel i5-6700t    | 32GB DDR4  | 1x1TB SATA SSD 128GB NVME                                | Integrated      | k8s control-plane     |
-| **TrueNAS**               | Custom                                                                                                                | AMD Ryzen 5 5500  | 32 GB DDR4 | 1TB NVMe, 4x4TB RAIDZ1 (Media), 2x4TB Mirrored (Backups) | Arc A310        | NAS + Jellyfin Server |
-| **PVE**                   | Custom                                                                                                                | AMD Ryzen 9 5950X | 64 GB DDR4 | NVMe for boot and VMs                                    | Nvidia 1660 6GB | Main proxmox node     |
-| **Pi**                    | Raspberry Pi 4                                                                                                        |                   | 8GB        | 1TB m.2 SATA SSD w/ USB HAT                              | n/a             | Home Assistant Server |
-| **Proxmox Backup Server** | [Mini-PC](https://www.amazon.com/FIREBAT-Computer-Expansible-Efficient-Business/dp/B0DZWP653T/ref=sr_1_4?s=pc&sr=1-4) | Intel N150        | 8GB        | 2TB SATA                                                 | n/a             | Backup Proxmox VM's   |
-
-</details>
-
-<details>
-  <summary><strong>Personal</strong></summary>
-
-| Name      | Device         | CPU               | RAM       | Storage   | GPU             | Purpose               |
-| --------- | -------------- | ----------------- | --------- | --------- | --------------- | --------------------- |
-| Gaming PC | Custom         | Intel i7-13700k   | 64GB DDR5 | 10TB NVMe | Nvidia RTX 5070 | Main Machine          |
-| Laptop    | HP 15-eh1097nr | AMD Ryzen 7 5700U | 32GB DDR4 | 1TB NVMe  | Integrated      | On the go/bed machine |
-
-</details>
-
-<details>
-  <summary><strong>Networking</strong></summary>
-
-| Name   | Device                                                                                                                               | Purpose         |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| Switch | [Pro XG 8 PoE](https://store.ui.com/us/en/category/switching-utility/products/usw-pro-xg-8-poe)                                      | Switch with PoE |
-| Router | [Cloud Gateway Fiber](https://store.ui.com/us/en/category/cloud-gateways-compact/collections/cloud-gateway-fiber/products/ucg-fiber) | Router/Firewall |
-| AP     | [U7 Pro XG](https://store.ui.com/us/en/category/all-wifi/products/u7-pro-xg)                                                         | AP              |
-
-</details>
-
-## 📌 **To-Do**
-
-See [Project Board](https://github.com/users/Mafyuh/projects/1)
