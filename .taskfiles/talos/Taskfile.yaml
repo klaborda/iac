@@ -4,7 +4,8 @@ version: "3"
 
 vars:
   TALOS_DIR: "{{.ROOT_DIR}}/kubernetes/talos"
-  SOPS_AGE_KEY_FILE: "/home/mafyuh/.sops/key.txt"
+  SOPS_AGE_KEY_FILE: "/home/klaborda/.sops/key.txt"
+  KUBECONFIG: "{{.ROOT_DIR}}/kubernetes/talos/clusterconfig/kubeconfig"
 
 env:
   SOPS_AGE_KEY_FILE: "{{.SOPS_AGE_KEY_FILE}}"
@@ -23,9 +24,7 @@ tasks:
     dir: "{{.TALOS_DIR}}"
     cmds:
       - talhelper genconfig
-      - export TALOSCONFIG={{.TALOSCONFIG}} && talosctl apply-config --nodes 10.0.0.9 --file clusterconfig/optiplex-k8s-talos-1.mafyuh.com.yaml
-      - export TALOSCONFIG={{.TALOSCONFIG}} && talosctl apply-config --nodes 10.0.0.84 --file clusterconfig/optiplex-k8s-talos-2.mafyuh.com.yaml
-      - export TALOSCONFIG={{.TALOSCONFIG}} && talosctl apply-config --nodes 10.0.0.177 --file clusterconfig/optiplex-k8s-talos-3.mafyuh.com.yaml
+      - export TALOSCONFIG={{.TALOSCONFIG}} && talosctl apply-config --nodes 192.168.86.53 --file clusterconfig/home-cluster-talos-1.laborda.me.yaml
     preconditions:
       - test -f {{.TALOS_DIR}}/talconfig.yaml
       - which talhelper talosctl
@@ -40,10 +39,36 @@ tasks:
       - test -f {{.TALOS_DIR}}/{{.FILE}}
       - which talosctl
 
+  bootstrap-node:
+    desc: First-time apply of Talos config to a fresh node (insecure) [IP=required, FILE=required]
+    dir: "{{.TALOS_DIR}}"
+    cmd: talosctl apply-config --insecure --nodes {{.IP}} --file {{.FILE}}
+    requires:
+      vars: [IP, FILE]
+    preconditions:
+      - test -f {{.TALOS_DIR}}/{{.FILE}}
+      - which talosctl
+
+  bootstrap-cluster:
+    desc: Bootstrap etcd on the first control-plane node (run once on a fresh cluster)
+    cmd: export TALOSCONFIG={{.TALOSCONFIG}} && talosctl bootstrap --nodes 192.168.86.53
+    preconditions:
+      - which talosctl
+
+  kubeconfig:
+    desc: Generate kubeconfig and verify API server reachability
+    dir: "{{.TALOS_DIR}}"
+    cmds:
+      - 'export TALOSCONFIG={{.TALOSCONFIG}} && talosctl kubeconfig --nodes 192.168.86.53 --force -f {{.KUBECONFIG}} >/dev/null'
+      - 'KUBECONFIG={{.KUBECONFIG}} kubectl get nodes >/dev/null'
+      - 'echo "VERIFIED: kubectl can reach the API server"'
+    preconditions:
+      - which talosctl kubectl
+
   apply-node-1:
     desc: Apply Talos config to node 1
     cmds:
       - task: apply-node
         vars:
-          IP: 10.0.0.9
-          FILE: clusterconfig/optiplex-k8s-talos-1.mafyuh.com.yaml
+          IP: 192.168.86.53
+          FILE: clusterconfig/home-cluster-talos-1.laborda.me

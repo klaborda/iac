@@ -1,9 +1,9 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: optiplex-k8s
-endpoint: https://10.0.0.150:6443
+clusterName: home-cluster
+endpoint: https://192.168.86.53:6443
 # renovate: depName=siderolabs/talos datasource=github-releases
-talosVersion: v1.13.7
+talosVersion: v1.13.9
 # renovate: depName=kubernetes/kubernetes datasource=github-releases
 kubernetesVersion: v1.36.3
 additionalApiServerCertSans: &sans
@@ -12,36 +12,10 @@ additionalMachineCertSans: *sans
 cniConfig:
   name: none
 nodes:
-  - hostname: talos-1.mafyuh.com
-    ipAddress: 10.0.0.9
+  - hostname: talos-1.laborda.me
+    ipAddress: 192.168.86.53
     controlPlane: true
-    installDisk: /dev/nvme0n1
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 18:66:da:10:67:04
-        dhcp: true
-        vip:
-          ip: &vip 10.0.0.150
-  - hostname: talos-2.mafyuh.com
-    ipAddress: 10.0.0.84
-    controlPlane: true
-    installDisk: /dev/nvme0n1
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 8c:ae:4c:b9:53:42
-        dhcp: true
-        vip:
-          ip: *vip
-  - hostname: talos-3.mafyuh.com
-    ipAddress: 10.0.0.177
-    controlPlane: true
-    installDisk: /dev/nvme0n1
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 8c:ae:4c:b9:53:6f
-        dhcp: true
-        vip:
-          ip: *vip
+    installDisk: /dev/sda
 controlPlane:
   schematic:
     customization:
@@ -101,12 +75,6 @@ controlPlane:
           extraArgs:
             feature-gates: "ImageVolume=true,MutatingAdmissionPolicy=true,ResourceHealthStatus=true"
             runtime-config: "admissionregistration.k8s.io/v1beta1=true"
-            oidc-client-id: "kubernetes"
-            oidc-groups-claim: "groups"
-            oidc-groups-prefix: "authentik:"
-            oidc-issuer-url: "https://auth.mafyuh.io/application/o/kubernetes/"
-            oidc-username-claim: "email"
-            oidc-username-prefix: "authentik:"
         coreDNS:
             disabled: false
         proxy:
@@ -116,7 +84,7 @@ controlPlane:
       cluster:
         etcd:
           advertisedSubnets:
-            - 10.0.0.0/24
+            - 192.168.86.0/24
     # Configure kube-controller-manager metrics
     - |-
       cluster:
