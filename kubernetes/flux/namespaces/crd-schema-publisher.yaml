@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: crd-schema-publisher
+  labels:
+    name: crd-schema-publisher

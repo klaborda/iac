@@ -14,3 +14,5 @@ resources:
   - rook.yaml
   - storage.yaml
   - databases.yaml
+  - security.yaml
+  - crd-schema-publisher.yaml
