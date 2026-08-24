@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  KUBECONFIG: "{{.ROOT_DIR}}/kubernetes/talos/clusterconfig/kubeconfig"
+  SOPS_AGE_KEY_FILE: "/home/klaborda/.sops/key.txt"
+  BUNDLE: "{{.ROOT_DIR}}/bootstrap/flux-aio.cue"
+
+env:
+  KUBECONFIG: "{{.KUBECONFIG}}"
+  SOPS_AGE_KEY_FILE: "{{.SOPS_AGE_KEY_FILE}}"
+
+tasks:
+  bootstrap:
+    desc: Install Flux (flux-aio) + the iac git-sync via Timoni (run once on a fresh cluster)
+    cmds:
+      - kubectl create ns flux-system --dry-run=client -o yaml | kubectl apply -f -
+      - kubectl -n flux-system create secret generic sops-age --from-file=age.agekey={{.SOPS_AGE_KEY_FILE}} --dry-run=client -o yaml | kubectl apply -f -
+      - timoni bundle apply -f {{.BUNDLE}}
+    preconditions:
+      - test -f {{.SOPS_AGE_KEY_FILE}}
+      - test -f {{.BUNDLE}}
+      - which kubectl timoni
+
+  apply:
+    desc: Apply (or re-apply) the bootstrap bundle — reconciles flux-aio + iac git-sync
+    cmd: timoni bundle apply -f {{.BUNDLE}}
+    preconditions:
+      - test -f {{.BUNDLE}}
+      - which timoni
+
+  diff:
+    desc: "Preview bootstrap bundle changes without applying (honors version: bumps in the .cue file)"
+    cmd: timoni bundle apply -f {{.BUNDLE}} --dry-run --diff
+    preconditions:
+      - test -f {{.BUNDLE}}
+      - which timoni
+
+  uninstall:
+    desc: Uninstall Flux and its CRDs (leaves the iac GitRepository's resources in place)
+    cmd: flux -n flux-system uninstall
+    preconditions:
+      - which flux
+
+  restart-flux:
+    desc: Restart the flux-aio pod (use to break a ReplicaSet out of backoff after a failed apply)
+    cmd: kubectl -n flux-system rollout restart deploy/flux
+    preconditions:
+      - which kubectl
