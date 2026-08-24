@@ -65,6 +65,7 @@ spec:
     localRedirectPolicy: true
     operator:
       enabled: true
+      replicas: 1
     rollOutCiliumPods: true
     routingMode: native
     securityContext:
