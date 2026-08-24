@@ -10,9 +10,9 @@ spec:
     name: envoy-gateway
   interval: 1h
   install:
-    crds: Skip
+    crds: CreateReplace
   upgrade:
-    crds: Skip
+    crds: CreateReplace
   values:
     config:
       envoyGateway:
