@@ -4,12 +4,12 @@ creation_rules:
     encrypted_regex: "^(data|stringData)$"
     key_groups:
       - age:
-          - age18z6wevr8ze5azvq7nfty3l29s7887l8n5mefr64avhlthtr4uvnqw90nfs
+          - age1rh7m647fsdmm7a2yy6un6fn845e8gmfxwnjz0gtdku77n0jsjsyqfqegpf
   - path_regex: nixos/secrets/.*\.yaml$
     key_groups:
       - age:
           # admin
-          - age18z6wevr8ze5azvq7nfty3l29s7887l8n5mefr64avhlthtr4uvnqw90nfs
+          - age1rh7m647fsdmm7a2yy6un6fn845e8gmfxwnjz0gtdku77n0jsjsyqfqegpf
           # laptop
           - age1aee7tp00ae7vngf50jn2zd9h2ddmcyaenkv4w3vlgec5frmvrc8qg64423
           # template

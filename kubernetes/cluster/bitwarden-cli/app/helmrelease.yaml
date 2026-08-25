@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://schemas.mafyuh.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: bitwarden-external-secrets
+  namespace: security
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: bitwarden-external-secrets
+      version: 0.3.0
+      sourceRef:
+        kind: HelmRepository
+        name: eznix86
+        namespace: flux-system
+  valuesFrom:
+    - kind: Secret
+      name: vaultwarden-credentials
+      valuesKey: bw_clientid
+      targetPath: secrets.bw_clientid
+    - kind: Secret
+      name: vaultwarden-credentials
+      valuesKey: bw_clientsecret
+      targetPath: secrets.bw_clientsecret
+    - kind: Secret
+      name: vaultwarden-credentials
+      valuesKey: bw_password
+      targetPath: secrets.bw_password
+    - kind: Secret
+      name: vaultwarden-credentials
+      valuesKey: bw_host
+      targetPath: secrets.bw_host
+  values:
+    image:
+      repository: ghcr.io/eznix86/bitwarden-cli
+      pullPolicy: IfNotPresent
+      tag: latest
+    operator:
+      image:
+        repository: ghcr.io/eznix86/bitwarden-external-secrets-operator
+        pullPolicy: IfNotPresent
+        tag: latest

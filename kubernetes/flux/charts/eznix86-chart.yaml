@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://schemas.mafyuh.dev/source.toolkit.fluxcd.io/helmrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: eznix86
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: https://eznix86.github.io/bitwarden-external-secrets
+  timeout: 3m
