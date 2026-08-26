@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  SOPS_AGE_KEY_FILE: "/home/klaborda/.sops/key.txt"
+  VAULTWARDEN_SECRET: "{{.ROOT_DIR}}/kubernetes/cluster/bitwarden-cli/app/vaultwarden-credentials.sops.yaml"
+
+env:
+  SOPS_AGE_KEY_FILE: "{{.SOPS_AGE_KEY_FILE}}"
+
+tasks:
+  decrypt:
+    desc: Decrypt and print the vaultwarden sops secret to stdout (read-only)
+    cmd: sops -d {{.VAULTWARDEN_SECRET}}
+    preconditions:
+      - test -f {{.SOPS_AGE_KEY_FILE}}
+      - test -f {{.VAULTWARDEN_SECRET}}
+      - which sops
+
+  edit:
+    desc: Open the vaultwarden sops secret in $EDITOR — decrypts on open, re-encrypts on save
+    cmd: sops {{.VAULTWARDEN_SECRET}}
+    preconditions:
+      - test -f {{.SOPS_AGE_KEY_FILE}}
+      - test -f {{.VAULTWARDEN_SECRET}}
+      - which sops

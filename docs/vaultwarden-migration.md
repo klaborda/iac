@@ -32,8 +32,8 @@ The eznix86 chart creates 4 ClusterSecretStores automatically:
 
 | secretKey | Old BWS UUID | New Store | New Item ID | Property |
 |---|---|---|---|---|
-| PGADMIN_DEFAULT_PASSWORD | `86f62c21-8919-48cb-ab91-b3100173e3cf` | `bitwarden-login` | _____ | `password` |
-| PGADMIN_DEFAULT_EMAIL | `1a8ec95e-4c56-49e8-ab9d-b3cd00274b2d` | `bitwarden-login` | _____ | `username` |
+| PGADMIN_DEFAULT_PASSWORD | `86f62c21-8919-48cb-ab91-b3100173e3cf` | `bitwarden-login` | 55d54309-f911-46cc-9b73-3d954fd62acc | `password` |
+| PGADMIN_DEFAULT_EMAIL | `1a8ec95e-4c56-49e8-ab9d-b3cd00274b2d` | `bitwarden-login` | 55d54309-f911-46cc-9b73-3d954fd62acc | `username` |
 
 ### 2. postgres component (shared, used by crunchy-pgo/immich)
 - **File:** `kubernetes/components/postgres/external-secret.yaml`
@@ -42,7 +42,7 @@ The eznix86 chart creates 4 ClusterSecretStores automatically:
 
 | secretKey | Old BWS UUID | New Store | New Item ID | Property |
 |---|---|---|---|---|
-| PG_MINIO_SECRET_KEY | `444d8094-5d11-4b3b-92a7-b371017e2269` | `bitwarden-field` | _____ | `minio_secret_key` |
+| PG_MINIO_SECRET_KEY | `444d8094-5d11-4b3b-92a7-b371017e2269` | `bitwarden-field` | 58a3f344-dfa1-4705-a90d-58d9d7ff236f | `minio_secret_key` |
 
 ### 3. crunchy-pgo (databases)
 - **File:** `kubernetes/apps/databases/crunchy-pgo/app/external-secret.yaml`
@@ -51,7 +51,7 @@ The eznix86 chart creates 4 ClusterSecretStores automatically:
 
 | secretKey | Old BWS UUID | New Store | New Item ID | Property |
 |---|---|---|---|---|
-| PG_MINIO_SECRET_KEY | `444d8094-5d11-4b3b-92a7-b371017e2269` | `bitwarden-field` | _____ | `minio_secret_key` |
+| PG_MINIO_SECRET_KEY | `444d8094-5d11-4b3b-92a7-b371017e2269` | `bitwarden-field` | 58a3f344-dfa1-4705-a90d-58d9d7ff236f | `minio_secret_key` |
 
 ### 4. kopia (storage)
 - **File:** `kubernetes/apps/storage/kopia/app/external-secret.yaml`
@@ -60,7 +60,7 @@ The eznix86 chart creates 4 ClusterSecretStores automatically:
 
 | secretKey | Old BWS UUID | New Store | New Item ID | Property |
 |---|---|---|---|---|
-| KOPIA_PASSWORD | `7bdf35e6-c19c-4b65-aa6d-b38c0108a1ad` | `bitwarden-field` | _____ | `kopia_password` |
+| KOPIA_PASSWORD | `7bdf35e6-c19c-4b65-aa6d-b38c0108a1ad` | `bitwarden-field` | 9180163d-e84b-48bf-82ae-eeabb4744c85 | `kopia_password` |
 
 ### 5. crd-schema-publisher (cluster)
 - **File:** `kubernetes/cluster/crd-schema-publisher/app/external-secret.yaml`
@@ -94,7 +94,7 @@ The eznix86 chart creates 4 ClusterSecretStores automatically:
 
 | secretKey | Old BWS UUID | New Store | New Item ID | Property |
 |---|---|---|---|---|
-| PG_MINIO_SECRET_KEY | `444d8094-5d11-4b3b-92a7-b371017e2269` | `bitwarden-field` | _____ | `minio_secret_key` |
+| PG_MINIO_SECRET_KEY | `444d8094-5d11-4b3b-92a7-b371017e2269` | `bitwarden-field` | 58a3f344-dfa1-4705-a90d-58d9d7ff236f | `minio_secret_key` |
 
 ### 9. cloudflared (networking) - uses target.template
 - **File:** `kubernetes/apps/networking/cloudflared/app/external-secret.yaml`
