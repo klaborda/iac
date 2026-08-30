@@ -2,7 +2,7 @@
 plugin: community.general.proxmox
 url: https://prox.mafyuh.xyz
 user: root@pam
-password: "{{ lookup('community.general.bitwarden_secrets_manager', '38b0f0b7-bd99-4d60-bc83-b2cc00721daf').value }}"
+password: "{{ lookup('pipe', 'bw get item 38b0f0b7-bd99-4d60-bc83-b2cc00721daf | jq -r \".login.password // .fields[0].value // .notes // empty\"') }}"
 validate_certs: true
 want_proxmox_nodes_ansible_host: false
 qemu_extended_statuses: false

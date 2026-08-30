@@ -30,13 +30,26 @@ jobs:
       - name: Set up SSH agent
         run: |
           eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_ed25519
 
       - name: Run Playbooks
         env:
-          BWS_ACCESS_TOKEN: ${{ secrets.BWS_ACCESS_TOKEN }}
+          BW_CLIENTID: ${{ secrets.BW_CLIENTID }}
+          BW_CLIENTSECRET: ${{ secrets.BW_CLIENTSECRET }}
+          BW_PASSWORD: ${{ secrets.BW_PASSWORD }}
+          BW_HOST: ${{ secrets.BW_HOST }}
           ANSIBLE_CONFIG: ansible/ansible.cfg
         run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+          nvm use default >/dev/null
+
+          if [ "$(bw status 2>/dev/null | jq -r '.status')" = "unauthenticated" ]; then
+            bw login --apikey
+          fi
+
+          export BW_SESSION=$(bw unlock --raw --passwordenv BW_PASSWORD)
+
           if [ -z "${{ github.event.inputs.playbook }}" ]; then
             echo "Running all playbooks in ansible/playbooks/weekly..."
             for playbook in ansible/playbooks/weekly/*.yml; do
@@ -46,7 +59,6 @@ jobs:
                 -i ansible/inventories/oracle/inventory.oci.yml \
                 -i ansible/inventories/proxmox/inventory.proxmox.yml \
                 "$playbook" \
-                --extra-vars "bw_access_token=${{ secrets.BWS_ACCESS_TOKEN }}" \
                 || echo "Playbook $playbook failed, continuing..."
             done
           else
@@ -55,6 +67,5 @@ jobs:
               -i ansible/inventories/netbox/netbox.inventory.yml \
               -i ansible/inventories/oracle/inventory.oci.yml \
               -i ansible/inventories/proxmox/inventory.proxmox.yml \
-              "ansible/playbooks/${{ github.event.inputs.playbook }}" \
-              --extra-vars "bw_access_token=${{ secrets.BWS_ACCESS_TOKEN }}"
+              "ansible/playbooks/${{ github.event.inputs.playbook }}"
           fi

@@ -32,7 +32,7 @@
         env_variables: "{{ secret_mapping[folder]['env_variables'] | default({}) }}"
 
     - name: Lookup secrets on the control machine
-      ansible.builtin.shell: "bws secret get {{ item }} | jq -r '.value'"
+      ansible.builtin.shell: "bw get item {{ item }} | jq -r '.login.password // .fields[0].value // .notes // empty'"
       loop: "{{ env_variables.values() }}"
       register: bw_secret_output
       delegate_to: localhost

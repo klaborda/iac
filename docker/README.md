@@ -14,6 +14,6 @@ That said, some services like **Jellyfin** will likely remain on Docker permanen
 
 Secrets are referenced via environment variables and mapped using [`secret-mappings.yml`](secret-mappings.yml), with actual secret values managed externally via Bitwarden Secrets.
 
-This maps the secrets to the correct stack's `.env` file on [Docker CD workflow](../.github/workflows/CD.yml) runs when the [`deploy-docker.yml`](../ansible/playbooks/deploy-docker.yml) playbook is executed using BWS CLI to retrieve the secret values.
+This maps the secrets to the correct stack's `.env` file on [Docker CD workflow](../.github/workflows/CD.yml) runs when the [`deploy-docker.yml`](../ansible/playbooks/deploy-docker.yml) playbook is executed using the Bitwarden CLI (`bw`) to retrieve the secret values.
 
-I do this so I don't have to SSH into these hosts for .env updates and can just manage all of them in one file, which is Git-safe as the values you see in [`secret-mappings.yml`](secret-mappings.yml) are just UUID's for secrets which require my `BWS_ACCESS_TOKEN` to lookup.
+I do this so I don't have to SSH into these hosts for .env updates and can just manage all of them in one file, which is Git-safe as the values you see in [`secret-mappings.yml`](secret-mappings.yml) are just UUID's for items in my Vaultwarden vault which require my vault to be unlocked to lookup.

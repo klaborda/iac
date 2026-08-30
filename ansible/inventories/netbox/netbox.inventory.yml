@@ -9,6 +9,6 @@ query_filters:
 # device_query_filters:
 #   - has_primary_ip: 'true'
 #   - tenant__n: internal
-token: "{{ lookup('community.general.bitwarden_secrets_manager', 'e379959b-fa31-48aa-b37a-b2ce004d36ad').value }}"
+token: "{{ lookup('pipe', 'bw get item e379959b-fa31-48aa-b37a-b2ce004d36ad | jq -r \".login.password // .fields[0].value // .notes // empty\"') }}"
 compose:
   ansible_port: 2424
