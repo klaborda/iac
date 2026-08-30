@@ -19,8 +19,8 @@ jobs:
       - name: Pre-clean workspace directory
         run: |
           echo "Cleaning workspace at ${{ github.workspace }}"
-          sudo chown -R $USER:$USER "${GITHUB_WORKSPACE}"
-          sudo rm -rf "${GITHUB_WORKSPACE:?}/*"
+          chown -R $USER:$USER "${GITHUB_WORKSPACE}" 2>/dev/null || true
+          rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
 
       - name: Checkout repository
         uses: actions/checkout@v7
