@@ -6,5 +6,5 @@
   tasks:
     - name: Log into DockerHub
       community.docker.docker_login:
-        username: mafyuh
+        username: klaborda
         password: "{{ docker_password }}"

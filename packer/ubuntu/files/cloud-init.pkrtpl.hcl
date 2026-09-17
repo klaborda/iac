@@ -6,7 +6,7 @@ autoinstall:
     layout: us
   identity:
     hostname: ubuntu-noble-template
-    username: mafyuh
+    username: klaborda
     password: $6$rounds=4096$dummy$dummy
   storage:
     layout:
@@ -32,7 +32,7 @@ autoinstall:
     package_upgrade: false
     timezone: America/New_York
     users:
-      - name: mafyuh
+      - name: klaborda
         groups: [adm, sudo]
         sudo: ALL=(ALL) NOPASSWD:ALL
         shell: /bin/zsh

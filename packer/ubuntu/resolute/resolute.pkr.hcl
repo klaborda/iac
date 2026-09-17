@@ -86,7 +86,7 @@ source "proxmox-iso" "ubuntu-server-resolute" {
     cloud_init_storage_pool = "local-lvm"
 
 
-    ssh_username = "mafyuh"
+    ssh_username = "klaborda"
 ## The build takes forever, 60 is more than enough
     ssh_timeout  = "60m"
     # WSL Filesystem
@@ -152,16 +152,16 @@ build {
 
     provisioner "ansible-local" {
         playbook_file = "../ansible/playbooks/zsh.yml"
-        extra_arguments = ["-e", "ansible_user=mafyuh"]
+        extra_arguments = ["-e", "ansible_user=klaborda"]
     }
 
     provisioner "shell" {
         inline = [
-            "sudo usermod -aG docker mafyuh",
+            "sudo usermod -aG docker klaborda",
             "sudo mkdir -p /etc/systemd/resolved.conf.d",
             "echo -e '[Resolve]\\nDNS=10.20.10.20' | sudo tee /etc/systemd/resolved.conf.d/dns_servers.conf",
-            "git config --global user.name 'Mafyuh'",
-            "git config --global user.email 'matt@mafyuh.com'",
+            "git config --global user.name 'Klaborda'",
+            "git config --global user.email 'klaborda@gmail.com'",
             "sudo cp -r $HOME/.oh-my-zsh /etc/skel/ 2>/dev/null || true",
             "sudo cp -r $HOME/.oh-my-posh /etc/skel/ 2>/dev/null || true",
             "sudo cp -r $HOME/.local /etc/skel/ 2>/dev/null || true"

@@ -93,7 +93,7 @@ jobs:
       - name: Set up SSH agent
         run: |
           eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_ed25519
+          ssh-add ~/.ssh/id_ed25519_gha
 
       - name: Run Ansible Playbook
         env:

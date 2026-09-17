@@ -9,7 +9,7 @@ services:
       - PGID=2003
       - UMASK=0022
       - TZ=America/New_York
-      - COUCHDB_USER=mafyuh
+      - COUCHDB_USER=klaborda
       - COUCHDB_PASSWORD=$COUCHDB_PASSWORD
     volumes:
       - /docker/appdata/couchdb-obsidian-livesync/data:/opt/couchdb/data

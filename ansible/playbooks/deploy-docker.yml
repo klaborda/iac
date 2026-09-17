@@ -1,9 +1,9 @@
 - name: Deploy application
   hosts: "{{ target_host }}"
   vars:
-    checkout_repo_path: "/home/mafyuh/iac"
-    repo_path: "/home/mafyuh/iac/docker/{{ folder }}"
-    secrets_mapping_file: "/home/mafyuh/iac/docker/secret-mappings.yml"
+    checkout_repo_path: "/home/klaborda/iac"
+    repo_path: "/home/klaborda/iac/docker/{{ folder }}"
+    secrets_mapping_file: "/home/klaborda/iac/docker/secret-mappings.yml"
   tasks:
     - name: Reset the repository to the remote main branch
       ansible.builtin.shell: |

@@ -10,6 +10,6 @@ want_facts: true
 exclude_nodes: true
 compose:
   ansible_host: proxmox_ipconfig0["ip"].split('/')[0]
-  ansible_user: mafyuh
+  ansible_user: klaborda
 filters:
   - "proxmox_tags_parsed is defined and 'ansible' in proxmox_tags_parsed"

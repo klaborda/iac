@@ -15,6 +15,6 @@ hostname_format_preferences:
 #   - key: defined_tags.Oracle-Tags.CreatedOn
 #     prefix: created_on_
 compose:
-  ansible_user: mafyuh
+  ansible_user: klaborda
   ansible_port: 2424
   ansible_host: public_ip
