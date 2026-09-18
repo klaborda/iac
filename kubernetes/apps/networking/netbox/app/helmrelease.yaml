@@ -23,8 +23,8 @@ spec:
       namespace: networking
 
     superuser:
-      name: mafyuh
-      email: admin@mafyuh.com
+      name: klaborda
+      email: klaborda@gmail.com
       password: ${NETBOX_ADMIN_PASSWORD}
 
     ingress:

@@ -63,7 +63,7 @@ spec:
           requests:
             storage: 20Gi
   users:
-    - name: mafyuh
+    - name: klaborda
       databases: ["authentik", "gatus", "jellyseerr", "netbox", "umami"]
       options: "SUPERUSER"
     - name: authentik
