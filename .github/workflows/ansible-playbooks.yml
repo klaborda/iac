@@ -55,8 +55,6 @@ jobs:
             for playbook in ansible/playbooks/weekly/*.yml; do
               echo "Running $playbook..."
               ansible-playbook \
-                -i ansible/inventories/netbox/netbox.inventory.yml \
-                -i ansible/inventories/oracle/inventory.oci.yml \
                 -i ansible/inventories/proxmox/inventory.proxmox.yml \
                 "$playbook" \
                 || echo "Playbook $playbook failed, continuing..."
@@ -64,8 +62,6 @@ jobs:
           else
             echo "Running selected playbook: ${{ github.event.inputs.playbook }}"
             ansible-playbook \
-              -i ansible/inventories/netbox/netbox.inventory.yml \
-              -i ansible/inventories/oracle/inventory.oci.yml \
               -i ansible/inventories/proxmox/inventory.proxmox.yml \
               "ansible/playbooks/${{ github.event.inputs.playbook }}"
           fi

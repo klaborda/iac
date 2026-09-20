@@ -115,8 +115,6 @@ jobs:
           export BW_SESSION=$(bw unlock --raw --passwordenv BW_PASSWORD)
 
           ansible-playbook \
-            -i ansible/inventories/netbox/netbox.inventory.yml \
-            -i ansible/inventories/oracle/inventory.oci.yml \
             -i ansible/inventories/proxmox/inventory.proxmox.yml \
             ./ansible/playbooks/deploy-docker.yml \
             --extra-vars "target_host=${target_host} folder=${folder}" \
