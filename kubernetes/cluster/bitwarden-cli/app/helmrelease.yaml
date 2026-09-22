@@ -42,3 +42,26 @@ spec:
         repository: ghcr.io/eznix86/bitwarden-external-secrets-operator
         pullPolicy: IfNotPresent
         tag: latest
+  # Fix broken liveness probe hardcoded in chart v0.3.0:
+  # busybox wget saves the response body to a file named after the last URL
+  # component (sync?force=true); the container runs as non-root uid 100 and
+  # can't create files in the working dir, so the probe always fails with
+  # "can't open 'sync?force=true': Permission denied" and kubelet kills the
+  # pod ~every 6 min. Add -O /dev/null and drop the bogus literal quotes from
+  # --post-data='' (exec probes run without a shell).
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: bitwarden-cli
+            patch: |-
+              - op: replace
+                path: /spec/template/spec/containers/0/livenessProbe/exec/command
+                value:
+                  - wget
+                  - -q
+                  - --post-data=
+                  - -O
+                  - /dev/null
+                  - http://127.0.0.1:8087/sync?force=true
