@@ -42,13 +42,23 @@ spec:
         repository: ghcr.io/eznix86/bitwarden-external-secrets-operator
         pullPolicy: IfNotPresent
         tag: latest
-  # Fix broken liveness probe hardcoded in chart v0.3.0:
-  # busybox wget saves the response body to a file named after the last URL
-  # component (sync?force=true); the container runs as non-root uid 100 and
-  # can't create files in the working dir, so the probe always fails with
-  # "can't open 'sync?force=true': Permission denied" and kubelet kills the
-  # pod ~every 6 min. Add -O /dev/null and drop the bogus literal quotes from
-  # --post-data='' (exec probes run without a shell).
+  # Two bugs hardcoded in chart eznix86/bitwarden-external-secrets v0.3.0:
+  #
+  # 1. Liveness probe: busybox wget saves the response body to a file named
+  #    after the last URL component (sync?force=true); the container runs as
+  #    non-root uid 100 and can't create files in the working dir, so the
+  #    probe always fails with "can't open 'sync?force=true': Permission
+  #    denied" and kubelet kills the pod ~every 6 min (3291 restarts/23d).
+  #    Add -O /dev/null and drop the bogus literal quotes from --post-data=''
+  #    (exec probes run without a shell).
+  #
+  # 2. NetworkPolicy external-secret-2-bw-cli allows ingress to the CLI pod
+  #    only from pods labeled app.kubernetes.io/part-of=external-secrets, but
+  #    the external-secrets controller pods are labeled
+  #    app.kubernetes.io/name=external-secrets (no part-of label), so the
+  #    policy matches nothing and ESO can never reach the CLI -> all four
+  #    ClusterSecretStores stay InvalidProviderConfig and the helm upgrade
+  #    times out waiting on them.
   postRenderers:
     - kustomize:
         patches:
@@ -65,3 +75,11 @@ spec:
                   - -O
                   - /dev/null
                   - http://127.0.0.1:8087/sync?force=true
+          - target:
+              kind: NetworkPolicy
+              name: external-secret-2-bw-cli
+            patch: |-
+              - op: replace
+                path: /spec/ingress/0/from/0/podSelector/matchLabels
+                value:
+                  app.kubernetes.io/name: external-secrets
